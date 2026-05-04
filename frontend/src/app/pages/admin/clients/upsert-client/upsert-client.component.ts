@@ -1,5 +1,5 @@
 import { Component, inject, type OnInit } from '@angular/core'
-import { AdminService } from '../../../../services/admin.service'
+import { 管理员Service } from '../../../../services/admin.service'
 import { CommonModule } from '@angular/common'
 import { MaterialModule } from '../../../../material-module'
 import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms'
@@ -17,7 +17,7 @@ import { HttpErrorResponse } from '@angular/common/http'
 import { SpinnerService } from '../../../../services/spinner.service'
 import { OidcInfoComponent } from '../../../../components/oidc-info/oidc-info.component'
 import { MatDialog } from '@angular/material/dialog'
-import { ConfirmComponent } from '../../../../dialogs/confirm/confirm.component'
+import { 确认Component } from '../../../../dialogs/confirm/confirm.component'
 import type { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete'
 import { isValidWildcardRedirect, optionalizeNullable, validateWildcardRedirects } from '@shared/utils'
 import { TranslatePipe } from '@ngx-translate/core'
@@ -50,7 +50,7 @@ export class UpsertClientComponent implements OnInit {
     { name: 'Client Secret Basic', value: 'client_secret_basic' },
     { name: 'Client Secret Post', value: 'client_secret_post' },
     { name: 'Client Secret JWT', value: 'client_secret_jwt' },
-    { name: 'None (Public)', value: 'none' },
+    { name: '否ne (Public)', value: 'none' },
     // 'private_key_jwt', // do not enable until jwk_uri is ready
   ]
 
@@ -137,7 +137,7 @@ export class UpsertClientComponent implements OnInit {
 
   pwdShow = false
 
-  private adminService = inject(AdminService)
+  private adminService = inject(管理员Service)
   private route = inject(ActivatedRoute)
   private router = inject(Router)
   snackbarService = inject(SnackbarService)
@@ -284,14 +284,14 @@ export class UpsertClientComponent implements OnInit {
   }
 
   deleteClient() {
-    const dialogRef = this.dialog.open(ConfirmComponent, {
+    const dialogRef = this.dialog.open(确认Component, {
       data: {
         message: `Are you sure you want to delete this app?`,
-        header: 'Delete',
+        header: '删除',
       },
     })
 
-    dialogRef.afterClosed().subscribe(async (result) => {
+    dialogRef.after关闭d().subscribe(async (result) => {
       if (!result) {
         return
       }

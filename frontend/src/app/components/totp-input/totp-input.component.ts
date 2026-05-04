@@ -65,7 +65,7 @@ export class TotpInputComponent implements AfterViewInit {
       return
     }
 
-    // Update code array
+    // 更新 code array
     this.code[index] = input.value
 
     // Auto-move focus if digit is entered
@@ -115,7 +115,7 @@ export class TotpInputComponent implements AfterViewInit {
         }
         break
 
-      case 'Backspace':
+      case '返回space':
         // Clear current input or move to previous input if current is empty
         if (currentInput.value === '' && currentIndex > 0) {
           const prevInput = document.getElementById(`totp-digit-${String(currentIndex - 1)}`) as HTMLInputElement
@@ -132,7 +132,7 @@ export class TotpInputComponent implements AfterViewInit {
     // Get pasted text
     const pastedText = event.clipboardData?.getData('text') || ''
 
-    // Remove non-numeric characters
+    // 移除 non-numeric characters
     const cleanedText = pastedText.replace(/[^\d]/g, '')
 
     // Distribute pasted characters across inputs
@@ -148,7 +148,7 @@ export class TotpInputComponent implements AfterViewInit {
     // Convert to array of characters
     const codeChars = trimmedCode.split('')
 
-    // Update code array
+    // 更新 code array
     this.code = ['', '', '', '', '', '']
 
     // Populate inputs

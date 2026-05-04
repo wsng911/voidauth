@@ -42,7 +42,7 @@ export class ConsentComponent implements OnInit {
         this.redirectHost = url?.host
       } catch (e) {
         console.error(e)
-        this.snackbarService.error('Confirmation details not valid.')
+        this.snackbarService.error('确认ation details not valid.')
       } finally {
         this.spinnerService.hide()
       }

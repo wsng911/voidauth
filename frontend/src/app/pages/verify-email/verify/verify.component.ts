@@ -68,7 +68,7 @@ export class VerifyComponent implements OnInit {
 
       this.userid = id
 
-      const redirect = await this.authService.verifyEmail({
+      const redirect = await this.authService.verify邮箱({
         userId: this.userid,
         challenge: challenge,
       })
@@ -112,7 +112,7 @@ export class VerifyComponent implements OnInit {
       if (!this.userid) {
         throw new Error('Missing User ID.')
       }
-      await this.authService.sendEmailVerification({ id: this.userid })
+      await this.authService.send邮箱Verification({ id: this.userid })
     } catch (e) {
       console.error(e)
       let error: string

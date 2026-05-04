@@ -23,7 +23,7 @@ import { AsyncPipe } from '@angular/common'
   templateUrl: './forgot-password.component.html',
   styleUrl: './forgot-password.component.scss',
 })
-export class ForgotPasswordComponent implements OnInit {
+export class Forgot密码Component implements OnInit {
   config?: ConfigResponse
   emailSent: boolean = false
 
@@ -51,10 +51,10 @@ export class ForgotPasswordComponent implements OnInit {
         throw new Error('Invalid email or username.')
       }
 
-      const result = await this.authService.sendPasswordReset(input)
+      const result = await this.authService.send密码Reset(input)
       this.emailSent = result.emailSent
 
-      this.snackbarService.message(this.emailSent ? 'Password reset link sent.' : 'Password reset link created, but could not be sent.')
+      this.snackbarService.message(this.emailSent ? '密码 reset link sent.' : '密码 reset link created, but could not be sent.')
     } catch (e) {
       let shownError: string | null = null
 

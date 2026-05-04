@@ -18,11 +18,11 @@ import { PasskeyService } from '../../services/passkey.service'
   templateUrl: './passkey-name.component.html',
   styleUrls: ['./passkey-name.component.scss'],
 })
-export class PasskeyNameDialog {
-  readonly dialogRef = inject(MatDialogRef<PasskeyNameDialog>)
+export class Passkey名称Dialog {
+  readonly dialogRef = inject(MatDialogRef<Passkey名称Dialog>)
 
-  displayNameControl = new FormControl<string | null>(
-    PasskeyNameDialog.getSuggested(),
+  display名称Control = new FormControl<string | null>(
+    Passkey名称Dialog.getSuggested(),
     [Validators.minLength(1), Validators.maxLength(64)],
   )
 
@@ -31,9 +31,9 @@ export class PasskeyNameDialog {
       const res = UAParser(navigator.userAgent)
       const os = res.os.name ?? ''
 
-      const passkeyPlatformName = PasskeyService.getPlatform(os)?.platformName ?? ''
+      const passkeyPlatform名称 = PasskeyService.getPlatform(os)?.platform名称 ?? ''
 
-      const label = [os, passkeyPlatformName].filter(l => !!l).join(' - ')
+      const label = [os, passkeyPlatform名称].filter(l => !!l).join(' - ')
 
       const suggested = label || null
       return (suggested && suggested.length > 64) ? suggested.slice(0, 61) + '...' : suggested

@@ -1,5 +1,5 @@
 {
-  "name": "voidauth",
+  "name": "voidauth-zh",
   "main": "server/index.ts",
   "type": "module",
   "engines": {
@@ -14,7 +14,6 @@
     "lint": "eslint",
     "prettier": "prettier --write \"**/*\""
   },
-  "author": "Derek Paschal",
   "license": "SEE LICENSE IN LICENSE FILE",
   "lint-staged": {
     "*": [
@@ -72,5 +71,6 @@
     "nodemon": "^3.1.14",
     "prettier": "^3.8.3",
     "typescript-eslint": "^8.59.0"
-  }
+  },
+  "description": "自托管 SSO/OIDC 认证服务，中文界面"
 }

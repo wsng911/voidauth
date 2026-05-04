@@ -16,7 +16,7 @@ import { TranslatePipe } from '@ngx-translate/core'
   templateUrl: './new-password-input.component.html',
   styleUrl: './new-password-input.component.scss',
 })
-export class NewPasswordInputComponent implements OnInit {
+export class 新建密码InputComponent implements OnInit {
   password = input.required<FormControl<string | null>>()
   pwdShow = model<boolean>(false)
 

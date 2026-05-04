@@ -3,16 +3,16 @@ import { MaterialModule } from '../../../material-module'
 import { MatTableDataSource } from '@angular/material/table'
 import { MatPaginator } from '@angular/material/paginator'
 import { MatSort } from '@angular/material/sort'
-import { AdminService } from '../../../services/admin.service'
+import { 管理员Service } from '../../../services/admin.service'
 import { SnackbarService } from '../../../services/snackbar.service'
 import type { TableColumn } from '../clients/clients.component'
 import { RouterLink } from '@angular/router'
 import { UserService } from '../../../services/user.service'
-import type { CurrentUserDetails, UserWithAdminIndicator } from '@shared/api-response/UserDetails'
+import type { CurrentUserDetails, UserWith管理员Indicator } from '@shared/api-response/UserDetails'
 import { SpinnerService } from '../../../services/spinner.service'
 import type { MatCheckbox, MatCheckboxChange } from '@angular/material/checkbox'
 import { MatDialog } from '@angular/material/dialog'
-import { ConfirmComponent } from '../../../dialogs/confirm/confirm.component'
+import { 确认Component } from '../../../dialogs/confirm/confirm.component'
 import { FormControl, ReactiveFormsModule } from '@angular/forms'
 import { debounceTime, distinctUntilChanged } from 'rxjs'
 import { TranslatePipe } from '@ngx-translate/core'
@@ -29,28 +29,28 @@ import { humanDuration } from '@shared/utils'
   templateUrl: './users.component.html',
   styleUrl: './users.component.scss',
 })
-export class UsersComponent {
+export class 用户Component {
   public me?: CurrentUserDetails
 
-  dataSource: MatTableDataSource<UserWithAdminIndicator> = new MatTableDataSource()
+  dataSource: MatTableDataSource<UserWith管理员Indicator> = new MatTableDataSource()
 
   readonly paginator = viewChild.required(MatPaginator)
   readonly sort = viewChild.required(MatSort)
 
-  columns: TableColumn<UserWithAdminIndicator>[] = [
+  columns: TableColumn<UserWith管理员Indicator>[] = [
     {
       columnDef: 'username',
-      header: 'Username',
+      header: '用户名',
       cell: element => element.username,
     },
     {
       columnDef: 'email',
-      header: 'Email',
+      header: '邮箱',
       cell: element => element.email ?? '',
     },
     {
       columnDef: 'emailVerified',
-      header: 'Email Verified',
+      header: '邮箱 Verified',
       isIcon: true,
       cell: element => element.emailVerified ? 'done' : 'not_interested',
     },
@@ -74,7 +74,7 @@ export class UsersComponent {
 
   search = new FormControl<string>('')
 
-  private adminService = inject(AdminService)
+  private adminService = inject(管理员Service)
   private snackbarService = inject(SnackbarService)
   private userService = inject(UserService)
   private spinnerService = inject(SpinnerService)
@@ -127,14 +127,14 @@ export class UsersComponent {
 
   delete(id: string) {
     const user = this.dataSource.data.find(u => u.id === id)
-    const dialogRef = this.dialog.open(ConfirmComponent, {
+    const dialogRef = this.dialog.open(确认Component, {
       data: {
         message: `Are you sure you want to remove user '${user?.username ?? id}'?`,
-        header: 'Delete',
+        header: '删除',
       },
     })
 
-    dialogRef.afterClosed().subscribe(async (result) => {
+    dialogRef.after关闭d().subscribe(async (result) => {
       if (!result) {
         return
       }
@@ -160,20 +160,20 @@ export class UsersComponent {
   }
 
   approveSelected() {
-    const dialogRef = this.dialog.open(ConfirmComponent, {
+    const dialogRef = this.dialog.open(确认Component, {
       data: {
         message: `Are you sure you want to approve ${String(this.selected.length)} user(s)?`,
         header: 'Approval',
       },
     })
 
-    dialogRef.afterClosed().subscribe(async (result) => {
+    dialogRef.after关闭d().subscribe(async (result) => {
       if (!result) {
         return
       }
       try {
         this.spinnerService.show()
-        await this.adminService.approveUsers(this.selected.map(s => s.id))
+        await this.adminService.approve用户(this.selected.map(s => s.id))
         this.dataSource.data.forEach((u) => {
           if (this.selected.find(s => s.id === u.id)) {
             u.approved = true
@@ -194,20 +194,20 @@ export class UsersComponent {
   }
 
   deleteSelected() {
-    const dialogRef = this.dialog.open(ConfirmComponent, {
+    const dialogRef = this.dialog.open(确认Component, {
       data: {
         message: `Are you sure you want to delete ${String(this.selected.length)} user(s)?`,
-        header: 'Delete',
+        header: '删除',
       },
     })
 
-    dialogRef.afterClosed().subscribe(async (result) => {
+    dialogRef.after关闭d().subscribe(async (result) => {
       if (!result) {
         return
       }
       try {
         this.spinnerService.show()
-        await this.adminService.deleteUsers(this.selected.map(s => s.id))
+        await this.adminService.delete用户(this.selected.map(s => s.id))
         this.dataSource.data = this.dataSource.data.filter(u => !this.selected.some(s => s.id === u.id))
         this.selected.forEach(s => s.source.checked = false)
         this.selected = []

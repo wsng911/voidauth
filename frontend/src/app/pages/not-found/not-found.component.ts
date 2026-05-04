@@ -11,7 +11,7 @@ import { TranslatePipe } from '@ngx-translate/core'
   templateUrl: './not-found.component.html',
   styleUrl: './not-found.component.scss',
 })
-export class NotFoundComponent implements OnInit {
+export class 否tFoundComponent implements OnInit {
   config?: ConfigResponse
 
   private configService = inject(ConfigService)

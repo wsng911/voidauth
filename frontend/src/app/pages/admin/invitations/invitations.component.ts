@@ -2,7 +2,7 @@ import { Component, inject, viewChild } from '@angular/core'
 import { MatPaginator } from '@angular/material/paginator'
 import { MatSort } from '@angular/material/sort'
 import { MatTableDataSource } from '@angular/material/table'
-import { AdminService } from '../../../services/admin.service'
+import { 管理员Service } from '../../../services/admin.service'
 import { SnackbarService } from '../../../services/snackbar.service'
 import type { TableColumn } from '../clients/clients.component'
 import { RouterLink } from '@angular/router'
@@ -10,7 +10,7 @@ import { MaterialModule } from '../../../material-module'
 import type { Invitation } from '@shared/db/Invitation'
 import { SpinnerService } from '../../../services/spinner.service'
 import { MatDialog } from '@angular/material/dialog'
-import { ConfirmComponent } from '../../../dialogs/confirm/confirm.component'
+import { 确认Component } from '../../../dialogs/confirm/confirm.component'
 import { humanDuration } from '@shared/utils'
 import { TranslatePipe } from '@ngx-translate/core'
 
@@ -33,12 +33,12 @@ export class InvitationsComponent {
   columns: TableColumn<Invitation>[] = [
     {
       columnDef: 'username',
-      header: 'Username',
+      header: '用户名',
       cell: element => element.username ?? '-',
     },
     {
       columnDef: 'email',
-      header: 'Email',
+      header: '邮箱',
       cell: element => element.email ?? '-',
     },
     {
@@ -55,7 +55,7 @@ export class InvitationsComponent {
 
   displayedColumns = ([] as string[]).concat(this.columns.map(c => c.columnDef)).concat(['actions'])
 
-  private adminService = inject(AdminService)
+  private adminService = inject(管理员Service)
   private snackbarService = inject(SnackbarService)
   private spinnerService = inject(SpinnerService)
   private dialog = inject(MatDialog)
@@ -74,14 +74,14 @@ export class InvitationsComponent {
 
   delete(id: string) {
     const invite = this.dataSource.data.find(i => i.id === id)
-    const dialogRef = this.dialog.open(ConfirmComponent, {
+    const dialogRef = this.dialog.open(确认Component, {
       data: {
         message: `Are you sure you want to remove invitation for '${invite?.username ?? invite?.email ?? id}'?`,
-        header: 'Delete',
+        header: '删除',
       },
     })
 
-    dialogRef.afterClosed().subscribe(async (result) => {
+    dialogRef.after关闭d().subscribe(async (result) => {
       if (!result) {
         return
       }

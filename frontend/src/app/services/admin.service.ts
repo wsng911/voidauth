@@ -2,28 +2,28 @@ import { HttpClient } from '@angular/common/http'
 import { inject, Injectable } from '@angular/core'
 import { firstValueFrom } from 'rxjs'
 import type { ClientUpsertRequest } from '@shared/api-request/admin/ClientUpsert'
-import type { UserUpdate } from '@shared/api-request/admin/UserUpdate'
+import type { User更新 } from '@shared/api-request/admin/User更新'
 import type { GroupUpsert } from '@shared/api-request/admin/GroupUpsert'
 import type { InvitationUpsert } from '@shared/api-request/admin/InvitationUpsert'
-import type { UserDetails, UserWithAdminIndicator } from '@shared/api-response/UserDetails'
+import type { UserDetails, UserWith管理员Indicator } from '@shared/api-response/UserDetails'
 import { type InvitationDetails } from '@shared/api-response/InvitationDetails'
 import type { Group } from '@shared/db/Group'
 import type { Invitation } from '@shared/db/Invitation'
 import { REDIRECT_PATHS } from '@shared/constants'
-import type { GroupUsers } from '@shared/api-response/admin/GroupUsers'
+import type { Group用户 } from '@shared/api-response/admin/Group用户'
 import type { ProxyAuthUpsert } from '@shared/api-request/admin/ProxyAuthUpsert'
 import type { ProxyAuthResponse } from '@shared/api-response/admin/ProxyAuthResponse'
-import type { PasswordResetUser } from '@shared/api-response/admin/PasswordResetUser'
-import type { PasswordResetCreate } from '@shared/api-request/admin/PasswordResetCreate'
-import type { EmailsResponse } from '@shared/api-response/admin/EmailsResponse'
+import type { 密码ResetUser } from '@shared/api-response/admin/密码ResetUser'
+import type { 密码Reset创建 } from '@shared/api-request/admin/密码Reset创建'
+import type { 邮箱sResponse } from '@shared/api-response/admin/邮箱sResponse'
 import type { SortDirection } from '@angular/material/sort'
 import type { ClientResponse } from '@shared/api-response/ClientResponse'
-import type { AdminConfig } from '@shared/api-response/admin/AdminConfig'
+import type { 管理员Config } from '@shared/api-response/admin/管理员Config'
 
 @Injectable({
   providedIn: 'root',
 })
-export class AdminService {
+export class 管理员Service {
   private http = inject(HttpClient)
 
   getInviteLink(domain: string, id: string, challenge: string) {
@@ -31,13 +31,13 @@ export class AdminService {
     return `${domain}/${REDIRECT_PATHS.INVITE}?${query}`
   }
 
-  getPasswordResetLink(domain: string, id: string, challenge: string) {
+  get密码ResetLink(domain: string, id: string, challenge: string) {
     const query = `id=${id}&challenge=${challenge}`
     return `${domain}/${REDIRECT_PATHS.RESET_PASSWORD}?${query}`
   }
 
   async config() {
-    return firstValueFrom(this.http.get<AdminConfig>('/api/admin/config'))
+    return firstValueFrom(this.http.get<管理员Config>('/api/admin/config'))
   }
 
   async clients() {
@@ -81,7 +81,7 @@ export class AdminService {
   }
 
   async group(id: string) {
-    return firstValueFrom(this.http.get<GroupUsers>(`/api/admin/group/${id}`))
+    return firstValueFrom(this.http.get<Group用户>(`/api/admin/group/${id}`))
   }
 
   async upsertGroup(group: GroupUpsert) {
@@ -93,14 +93,14 @@ export class AdminService {
   }
 
   async users(searchTerm?: string | null) {
-    return firstValueFrom(this.http.get<UserWithAdminIndicator[]>(`/api/admin/users${searchTerm ? '/' + searchTerm : ''}`))
+    return firstValueFrom(this.http.get<UserWith管理员Indicator[]>(`/api/admin/users${searchTerm ? '/' + searchTerm : ''}`))
   }
 
   async user(id: string) {
     return firstValueFrom(this.http.get<UserDetails>(`/api/admin/user/${id}`))
   }
 
-  async updateUser(user: UserUpdate) {
+  async updateUser(user: User更新) {
     return firstValueFrom(this.http.patch<null>('/api/admin/user', user))
   }
 
@@ -112,11 +112,11 @@ export class AdminService {
     return firstValueFrom(this.http.post<null>(`/api/admin/user/signout/${id}`, null))
   }
 
-  async approveUsers(ids: string[]) {
+  async approve用户(ids: string[]) {
     return firstValueFrom(this.http.patch<null>('/api/admin/users/approve', { users: ids }))
   }
 
-  async deleteUsers(ids: string[]) {
+  async delete用户(ids: string[]) {
     return firstValueFrom(this.http.post<null>('/api/admin/users/delete', { users: ids }))
   }
 
@@ -141,18 +141,18 @@ export class AdminService {
   }
 
   async passwordResets() {
-    return firstValueFrom(this.http.get<PasswordResetUser[]>('/api/admin/passwordresets'))
+    return firstValueFrom(this.http.get<密码ResetUser[]>('/api/admin/passwordresets'))
   }
 
-  async createPasswordReset(passwordReset: PasswordResetCreate) {
-    return firstValueFrom(this.http.post<PasswordResetUser>('/api/admin/passwordreset', passwordReset))
+  async create密码Reset(passwordReset: 密码Reset创建) {
+    return firstValueFrom(this.http.post<密码ResetUser>('/api/admin/passwordreset', passwordReset))
   }
 
-  async deletePasswordReset(id: string) {
+  async delete密码Reset(id: string) {
     return firstValueFrom(this.http.delete<null>(`/api/admin/passwordreset/${id}`))
   }
 
-  async sendPasswordReset(id: string) {
+  async send密码Reset(id: string) {
     return firstValueFrom(this.http.post<null>(`/api/admin/send_passwordreset/${id}`, null))
   }
 
@@ -164,10 +164,10 @@ export class AdminService {
         query += `&sortDirection=${sortDirection}`
       }
     }
-    return firstValueFrom(this.http.get<EmailsResponse>(`/api/admin/emails${query}`))
+    return firstValueFrom(this.http.get<邮箱sResponse>(`/api/admin/emails${query}`))
   }
 
-  async sendTestEmail(email: string) {
+  async sendTest邮箱(email: string) {
     return firstValueFrom(this.http.post<null>(`/api/admin/send_test_email`, {
       email,
     }))

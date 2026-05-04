@@ -3,7 +3,7 @@ import { MatPaginator } from '@angular/material/paginator'
 import { type Sort } from '@angular/material/sort'
 import { MatTableDataSource } from '@angular/material/table'
 import type { ProxyAuthResponse } from '@shared/api-response/admin/ProxyAuthResponse'
-import { AdminService } from '../../../services/admin.service'
+import { 管理员Service } from '../../../services/admin.service'
 import { SnackbarService } from '../../../services/snackbar.service'
 import { SpinnerService } from '../../../services/spinner.service'
 import type { TableColumn } from '../clients/clients.component'
@@ -11,7 +11,7 @@ import { RouterLink } from '@angular/router'
 import { MaterialModule } from '../../../material-module'
 import { sortWildcardDomains } from '@shared/utils'
 import { MatDialog } from '@angular/material/dialog'
-import { ConfirmComponent } from '../../../dialogs/confirm/confirm.component'
+import { 确认Component } from '../../../dialogs/confirm/confirm.component'
 import { TranslatePipe } from '@ngx-translate/core'
 
 @Component({
@@ -44,7 +44,7 @@ export class DomainsComponent {
 
   displayedColumns = (this.columns.map(c => c.columnDef) as string[]).concat('actions')
 
-  private adminService = inject(AdminService)
+  private adminService = inject(管理员Service)
   private snackbarService = inject(SnackbarService)
   private spinnerService = inject(SpinnerService)
   private dialog = inject(MatDialog)
@@ -82,14 +82,14 @@ export class DomainsComponent {
 
   delete(proxyauth_id: string) {
     const domain = this.dataSource.data.find(d => d.id === proxyauth_id)
-    const dialogRef = this.dialog.open(ConfirmComponent, {
+    const dialogRef = this.dialog.open(确认Component, {
       data: {
         message: `Are you sure you want to remove domain '${domain?.domain ?? proxyauth_id}'?`,
-        header: 'Delete',
+        header: '删除',
       },
     })
 
-    dialogRef.afterClosed().subscribe(async (result) => {
+    dialogRef.after关闭d().subscribe(async (result) => {
       if (!result) {
         return
       }

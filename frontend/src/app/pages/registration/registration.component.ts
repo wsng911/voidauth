@@ -9,14 +9,14 @@ import { SnackbarService } from '../../services/snackbar.service'
 import { USERNAME_REGEX } from '@shared/constants'
 import type { InvitationDetails } from '@shared/api-response/InvitationDetails'
 import { ConfigService } from '../../services/config.service'
-import { NewPasswordInputComponent } from '../../components/new-password-input/new-password-input.component'
+import { 新建密码InputComponent } from '../../components/new-password-input/new-password-input.component'
 import { SpinnerService } from '../../services/spinner.service'
 import type { ConfigResponse } from '@shared/api-response/ConfigResponse'
 import { TextDividerComponent } from '../../components/text-divider/text-divider.component'
 import { PasskeyService, type PasskeySupport } from '../../services/passkey.service'
 import { startRegistration, WebAuthnError } from '@simplewebauthn/browser'
 import { UserService } from '../../services/user.service'
-import { isValidEmail } from '../../validators/validators'
+import { isValid邮箱 } from '../../validators/validators'
 import { TranslatePipe } from '@ngx-translate/core'
 import { AsyncPipe } from '@angular/common'
 
@@ -29,7 +29,7 @@ import { AsyncPipe } from '@angular/common'
     MaterialModule,
     ValidationErrorPipe,
     RouterLink,
-    NewPasswordInputComponent,
+    新建密码InputComponent,
     TextDividerComponent,
     TranslatePipe,
     AsyncPipe,
@@ -45,7 +45,7 @@ export class RegistrationComponent implements OnInit {
     email: new FormControl<string>({
       value: '',
       disabled: false,
-    }, [isValidEmail]),
+    }, [isValid邮箱]),
 
     name: new FormControl<string | null>({
       value: null,
@@ -149,9 +149,9 @@ export class RegistrationComponent implements OnInit {
       const values = this.form.getRawValue()
 
       if (!values.username) {
-        throw new Error('Username missing.')
+        throw new Error('用户名 missing.')
       } else if (!values.password) {
-        throw new Error('Password missing')
+        throw new Error('密码 missing')
       }
 
       const { username, password } = values
@@ -203,14 +203,14 @@ export class RegistrationComponent implements OnInit {
       const values = this.form.getRawValue()
 
       if (!values.username) {
-        throw Error('Username required.')
+        throw Error('用户名 required.')
       }
 
       const { username } = values
 
       const optionsJSON = await this.authService.startPasskeySignup(this.invitation?.id, this.invitation?.challenge)
       optionsJSON.user.name = username
-      optionsJSON.user.displayName = username
+      optionsJSON.user.display名称 = username
       const registration = await startRegistration({ optionsJSON })
       const redirect = await this.authService.endPasskeySignup({
         ...values,

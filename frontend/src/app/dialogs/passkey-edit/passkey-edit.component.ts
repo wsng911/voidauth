@@ -14,8 +14,8 @@ import { ValidationErrorPipe } from '../../pipes/ValidationErrorPipe'
   templateUrl: './passkey-edit.component.html',
   styleUrl: './passkey-edit.component.scss',
 })
-export class PasskeyEditDialog {
-  readonly dialogRef = inject(MatDialogRef<PasskeyEditDialog>)
-  readonly data = inject<{ id: string, displayName: string | null }>(MAT_DIALOG_DATA)
-  displayNameControl = new FormControl<string | null>(this.data.displayName ?? null, [Validators.minLength(1)])
+export class Passkey编辑Dialog {
+  readonly dialogRef = inject(MatDialogRef<Passkey编辑Dialog>)
+  readonly data = inject<{ id: string, display名称: string | null }>(MAT_DIALOG_DATA)
+  display名称Control = new FormControl<string | null>(this.data.display名称 ?? null, [Validators.minLength(1)])
 }

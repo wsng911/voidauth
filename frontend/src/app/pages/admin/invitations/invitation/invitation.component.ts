@@ -6,7 +6,7 @@ import { ActivatedRoute, Router } from '@angular/router'
 import { USERNAME_REGEX } from '@shared/constants'
 import { MaterialModule } from '../../../../material-module'
 import { ValidationErrorPipe } from '../../../../pipes/ValidationErrorPipe'
-import { AdminService } from '../../../../services/admin.service'
+import { 管理员Service } from '../../../../services/admin.service'
 import { SnackbarService } from '../../../../services/snackbar.service'
 import type { TypedControls } from '../../clients/upsert-client/upsert-client.component'
 import type { InvitationUpsert } from '@shared/api-request/admin/InvitationUpsert'
@@ -15,10 +15,10 @@ import { ConfigService } from '../../../../services/config.service'
 import type { ConfigResponse } from '@shared/api-response/ConfigResponse'
 import { SpinnerService } from '../../../../services/spinner.service'
 import { MatDialog } from '@angular/material/dialog'
-import { ConfirmComponent } from '../../../../dialogs/confirm/confirm.component'
-import { isValidEmail } from '../../../../validators/validators'
+import { 确认Component } from '../../../../dialogs/confirm/confirm.component'
+import { isValid邮箱 } from '../../../../validators/validators'
 import { TranslatePipe, TranslateService } from '@ngx-translate/core'
-import type { AdminConfig } from '@shared/api-response/admin/AdminConfig'
+import type { 管理员Config } from '@shared/api-response/admin/管理员Config'
 
 @Component({
   selector: 'app-invitation',
@@ -36,7 +36,7 @@ import type { AdminConfig } from '@shared/api-response/admin/AdminConfig'
 export class InvitationComponent {
   public id: string | null = null
   public config?: ConfigResponse
-  public adminConfig?: AdminConfig
+  public adminConfig?: 管理员Config
 
   public groups: string[] = []
   public unselectedGroups: string[] = []
@@ -47,11 +47,11 @@ export class InvitationComponent {
   }, [])
 
   public inviteLink?: string
-  public inviteEmail?: string | null
+  public invite邮箱?: string | null
 
   public form = new FormGroup({
     username: new FormControl<string | null>(null, [Validators.minLength(1), Validators.pattern(USERNAME_REGEX)]),
-    email: new FormControl<string | null>(null, [isValidEmail]),
+    email: new FormControl<string | null>(null, [isValid邮箱]),
     name: new FormControl<string | null>(null, [Validators.minLength(1)]),
     userExpiresAt: new FormControl<Date | null>(null, []),
     emailVerified: new FormControl<boolean>({ value: true, disabled: true }, { nonNullable: true }),
@@ -59,12 +59,12 @@ export class InvitationComponent {
   }, [(c) => {
     const f = c as FormGroup<TypedControls<Omit<InvitationUpsert, 'id'>>>
     if (!f.controls.email.value && !f.controls.username.value) {
-      return { usernameOrEmail: 'Username or Email are required.' }
+      return { usernameOr邮箱: '用户名 or 邮箱 are required.' }
     }
     return null
   }]) satisfies FormGroup<TypedControls<Omit<InvitationUpsert, 'id'>>>
 
-  private adminService = inject(AdminService)
+  private adminService = inject(管理员Service)
   private configService = inject(ConfigService)
   private route = inject(ActivatedRoute)
   private router = inject(Router)
@@ -89,7 +89,7 @@ export class InvitationComponent {
           this.id = id
           const invitation = await this.adminService.invitation(this.id)
           await this.formSet(invitation)
-          this.setEmailVerifiedState()
+          this.set邮箱VerifiedState()
         } else {
           // This is a new invite
           if (this.adminConfig.defaultUserExpireDuration) {
@@ -113,7 +113,7 @@ export class InvitationComponent {
     })
 
     this.form.controls.email.valueChanges.subscribe(() => {
-      this.setEmailVerifiedState()
+      this.set邮箱VerifiedState()
     })
 
     // Keeps the userExpiresAt datepicker and timepicker in sync
@@ -133,7 +133,7 @@ export class InvitationComponent {
         ? new Date(invitation.userExpiresAt)
         : null,
     })
-    this.inviteEmail = invitation.email
+    this.invite邮箱 = invitation.email
     if (!this.config) {
       this.config = await this.configService.getConfig()
     }
@@ -171,7 +171,7 @@ export class InvitationComponent {
     this.groupAutoFilter()
   }
 
-  setEmailVerifiedState() {
+  set邮箱VerifiedState() {
     if (this.form.controls.email.value) {
       this.form.controls.emailVerified.enable()
     } else {
@@ -183,7 +183,7 @@ export class InvitationComponent {
     this.snackbarService.message(String(this.translateService.instant('admin.invitation.messages.link-copied')))
   }
 
-  async sendEmail() {
+  async send邮箱() {
     try {
       this.spinnerService.show()
 
@@ -192,7 +192,7 @@ export class InvitationComponent {
       }
 
       await this.adminService.sendInvitation(this.id)
-      this.snackbarService.message(`Invite sent to ${String(this.inviteEmail)}.`)
+      this.snackbarService.message(`Invite sent to ${String(this.invite邮箱)}.`)
     } catch (e) {
       console.error(e)
       this.snackbarService.error('Could not send invitation.')
@@ -228,14 +228,14 @@ export class InvitationComponent {
   }
 
   remove() {
-    const dialogRef = this.dialog.open(ConfirmComponent, {
+    const dialogRef = this.dialog.open(确认Component, {
       data: {
         message: `Are you sure you want to delete this invitation?`,
-        header: 'Delete',
+        header: '删除',
       },
     })
 
-    dialogRef.afterClosed().subscribe(async (result) => {
+    dialogRef.after关闭d().subscribe(async (result) => {
       if (!result) {
         return
       }

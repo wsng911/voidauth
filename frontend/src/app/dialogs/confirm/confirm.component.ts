@@ -12,8 +12,8 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms'
   templateUrl: './confirm.component.html',
   styleUrl: './confirm.component.scss',
 })
-export class ConfirmComponent {
-  readonly dialogRef = inject(MatDialogRef<ConfirmComponent>)
+export class 确认Component {
+  readonly dialogRef = inject(MatDialogRef<确认Component>)
   readonly data = inject<{ message: string, header?: string, requiredText?: string }>(MAT_DIALOG_DATA)
   requiredTextControl = new FormControl<string | null>(null)
 }

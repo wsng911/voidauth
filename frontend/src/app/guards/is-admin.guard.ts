@@ -4,7 +4,7 @@ import { UserService } from '../services/user.service'
 import { SpinnerService } from '../services/spinner.service'
 import { REDIRECT_PATHS } from '@shared/constants'
 
-export const isAdminGuard: CanActivateFn = async (_route, _state) => {
+export const is管理员Guard: CanActivateFn = async (_route, _state) => {
   const userService = inject(UserService)
   const spinnerService = inject(SpinnerService)
   const router = inject(Router)
@@ -12,7 +12,7 @@ export const isAdminGuard: CanActivateFn = async (_route, _state) => {
   try {
     spinnerService.show()
     const user = await userService.getMyUser()
-    if (!user.isPrivileged || !user.isAdmin) {
+    if (!user.isPrivileged || !user.is管理员) {
       // redirect back to home page
       await router.navigate(['/'], {
         replaceUrl: true,

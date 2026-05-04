@@ -3,18 +3,18 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http'
 import { firstValueFrom } from 'rxjs'
 import type { RegisterUser } from '@shared/api-request/RegisterUser'
 import type { LoginUser } from '@shared/api-request/LoginUser'
-import type { VerifyUserEmail } from '@shared/api-request/VerifyUserEmail'
+import type { VerifyUser邮箱 } from '@shared/api-request/VerifyUser邮箱'
 import type { Redirect } from '@shared/api-response/Redirect'
 import type { ConsentDetails } from '@shared/api-response/ConsentDetails'
 import type { InvitationDetails } from '@shared/api-response/InvitationDetails'
-import type { SendPasswordResetResponse } from '@shared/api-response/SendPasswordResetResponse'
-import type { ResetPassword } from '@shared/api-request/ResetPassword'
+import type { Send密码ResetResponse } from '@shared/api-response/Send密码ResetResponse'
+import type { Reset密码 } from '@shared/api-request/Reset密码'
 import { type RegistrationResponseJSON, type PublicKeyCredentialCreationOptionsJSON, WebAuthnError } from '@simplewebauthn/browser'
 import type { RegisterTotpResponse } from '@shared/api-response/RegisterTotpResponse'
 import type { InteractionInfo } from '@shared/api-response/InteractionInfo'
 import { oidcLoginPath } from '@shared/oidc'
 import { getCurrentHost } from './config.service'
-import type { PasswordResetResponse } from '@shared/api-response/PasswordResetResponse'
+import type { 密码ResetResponse } from '@shared/api-response/密码ResetResponse'
 
 @Injectable({
   providedIn: 'root',
@@ -82,11 +82,11 @@ export class AuthService {
     return firstValueFrom(this.http.post<null>(`/api/interaction/${uid}/confirm`, null))
   }
 
-  async verifyEmail(body: VerifyUserEmail) {
+  async verify邮箱(body: VerifyUser邮箱) {
     return firstValueFrom(this.http.post<Redirect | undefined>('/api/interaction/verify_email', body))
   }
 
-  async sendEmailVerification(body: { id: string }) {
+  async send邮箱Verification(body: { id: string }) {
     return firstValueFrom(this.http.post<null>('/api/auth/send_verify_email', body))
   }
 
@@ -94,21 +94,21 @@ export class AuthService {
     return firstValueFrom(this.http.get<InvitationDetails>(`/api/auth/invitation/${id}/${challenge}`))
   }
 
-  async sendPasswordReset(input: string) {
-    return firstValueFrom(this.http.post<SendPasswordResetResponse>('/api/public/send_password_reset', { input }))
+  async send密码Reset(input: string) {
+    return firstValueFrom(this.http.post<Send密码ResetResponse>('/api/public/send_password_reset', { input }))
   }
 
-  async resetPassword(body: ResetPassword) {
-    return firstValueFrom(this.http.post<PasswordResetResponse>('/api/public/reset_password', body))
+  async reset密码(body: Reset密码) {
+    return firstValueFrom(this.http.post<密码ResetResponse>('/api/public/reset_password', body))
   }
 
-  async resetPasswordPasskeyStart(body: Omit<ResetPassword, 'newPassword'>) {
+  async reset密码PasskeyStart(body: Omit<Reset密码, 'new密码'>) {
     return firstValueFrom(this.http.post<PublicKeyCredentialCreationOptionsJSON>('/api/public/reset_password/passkey/start', body))
   }
 
-  async resetPasswordPasskeyEnd(body: Omit<ResetPassword, 'newPassword'> & RegistrationResponseJSON) {
+  async reset密码PasskeyEnd(body: Omit<Reset密码, 'new密码'> & RegistrationResponseJSON) {
     try {
-      const result = await firstValueFrom(this.http.post<PasswordResetResponse>('/api/public/reset_password/passkey/end', body))
+      const result = await firstValueFrom(this.http.post<密码ResetResponse>('/api/public/reset_password/passkey/end', body))
       localStorage.setItem('passkey_seen', 'true')
       return result
     } catch (error) {

@@ -3,7 +3,7 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms'
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog'
 import { MaterialModule } from '../../material-module'
 import { ValidationErrorPipe } from '../../pipes/ValidationErrorPipe'
-import { isValidEmail } from '../../validators/validators'
+import { isValid邮箱 } from '../../validators/validators'
 import { AsyncPipe } from '@angular/common'
 
 @Component({
@@ -17,8 +17,8 @@ import { AsyncPipe } from '@angular/common'
   templateUrl: './email-input.component.html',
   styleUrl: './email-input.component.scss',
 })
-export class EmailInputComponent {
-  readonly dialogRef = inject(MatDialogRef<EmailInputComponent>)
+export class 邮箱InputComponent {
+  readonly dialogRef = inject(MatDialogRef<邮箱InputComponent>)
   readonly data = inject<{ message?: string, header?: string, initial?: string }>(MAT_DIALOG_DATA)
-  emailControl = new FormControl<string | null>(this.data.initial ?? null, [isValidEmail])
+  emailControl = new FormControl<string | null>(this.data.initial ?? null, [isValid邮箱])
 }

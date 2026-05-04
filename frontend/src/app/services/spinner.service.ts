@@ -11,17 +11,17 @@ export class SpinnerService {
 
   show() {
     this.count++
-    this.checkStatus()
+    this.check状态()
   }
 
   hide() {
     setTimeout(() => {
       this.count--
-      this.checkStatus()
+      this.check状态()
     }, 500)
   }
 
-  private checkStatus() {
+  private check状态() {
     if (this.count > 0) {
       void this.ngxSpinnerService.show()
     } else {

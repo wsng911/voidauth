@@ -4,19 +4,19 @@ import { ReactiveFormsModule, FormControl, FormGroup, Validators } from '@angula
 import { ActivatedRoute, Router, RouterLink } from '@angular/router'
 import { MaterialModule } from '../../../../material-module'
 import { ValidationErrorPipe } from '../../../../pipes/ValidationErrorPipe'
-import { AdminService } from '../../../../services/admin.service'
+import { 管理员Service } from '../../../../services/admin.service'
 import { SnackbarService } from '../../../../services/snackbar.service'
 import type { TypedControls } from '../../clients/upsert-client/upsert-client.component'
-import type { UserUpdate } from '@shared/api-request/admin/UserUpdate'
+import type { User更新 } from '@shared/api-request/admin/User更新'
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete'
 import { USERNAME_REGEX } from '@shared/constants'
 import type { CurrentUserDetails, UserDetails } from '@shared/api-response/UserDetails'
 import { UserService } from '../../../../services/user.service'
 import { SpinnerService } from '../../../../services/spinner.service'
 import { MatDialog } from '@angular/material/dialog'
-import { ConfirmComponent } from '../../../../dialogs/confirm/confirm.component'
+import { 确认Component } from '../../../../dialogs/confirm/confirm.component'
 import type { ItemIn, Nullable } from '@shared/utils'
-import { isValidEmail } from '../../../../validators/validators'
+import { isValid邮箱 } from '../../../../validators/validators'
 import { TranslatePipe } from '@ngx-translate/core'
 
 @Component({
@@ -46,16 +46,16 @@ export class UserComponent implements OnInit {
 
   public form = new FormGroup({
     username: new FormControl<string | null>(null, [Validators.required, Validators.minLength(1), Validators.pattern(USERNAME_REGEX)]),
-    email: new FormControl<string | null>(null, [isValidEmail]),
+    email: new FormControl<string | null>(null, [isValid邮箱]),
     name: new FormControl<string | null>(null, [Validators.minLength(1)]),
     expiresAt: new FormControl<Date | null>(null, []),
     emailVerified: new FormControl<boolean>(false, { nonNullable: true }),
     approved: new FormControl<boolean>(false, { nonNullable: true }),
     mfaRequired: new FormControl<boolean>(false, { nonNullable: true }),
     groups: new FormControl<UserDetails['groups']>([], { nonNullable: true }),
-  }) satisfies FormGroup<TypedControls<Omit<UserUpdate, 'id' | 'username'> & Nullable<Pick<UserUpdate, 'username'>>>>
+  }) satisfies FormGroup<TypedControls<Omit<User更新, 'id' | 'username'> & Nullable<Pick<User更新, 'username'>>>>
 
-  private adminService = inject(AdminService)
+  private adminService = inject(管理员Service)
   private userService = inject(UserService)
   private route = inject(ActivatedRoute)
   private router = inject(Router)
@@ -173,14 +173,14 @@ export class UserComponent implements OnInit {
   }
 
   remove() {
-    const dialogRef = this.dialog.open(ConfirmComponent, {
+    const dialogRef = this.dialog.open(确认Component, {
       data: {
         message: `Are you sure you want to delete this user?`,
-        header: 'Delete',
+        header: '删除',
       },
     })
 
-    dialogRef.afterClosed().subscribe(async (result) => {
+    dialogRef.after关闭d().subscribe(async (result) => {
       if (!result) {
         return
       }

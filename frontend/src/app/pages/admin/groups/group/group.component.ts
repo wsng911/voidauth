@@ -3,18 +3,18 @@ import { Component, inject } from '@angular/core'
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms'
 import { MaterialModule } from '../../../../material-module'
 import { ValidationErrorPipe } from '../../../../pipes/ValidationErrorPipe'
-import { AdminService } from '../../../../services/admin.service'
+import { 管理员Service } from '../../../../services/admin.service'
 import { ActivatedRoute, Router, RouterLink } from '@angular/router'
 import { SnackbarService } from '../../../../services/snackbar.service'
 import type { TypedControls } from '../../clients/upsert-client/upsert-client.component'
 import type { GroupUpsert } from '@shared/api-request/admin/GroupUpsert'
 import type { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete'
-import type { UserWithoutPassword } from '@shared/api-response/UserDetails'
-import type { GroupUsers } from '@shared/api-response/admin/GroupUsers'
+import type { UserWithout密码 } from '@shared/api-response/UserDetails'
+import type { Group用户 } from '@shared/api-response/admin/Group用户'
 import { ADMIN_GROUP } from '@shared/constants'
 import { SpinnerService } from '../../../../services/spinner.service'
 import { MatDialog } from '@angular/material/dialog'
-import { ConfirmComponent } from '../../../../dialogs/confirm/confirm.component'
+import { 确认Component } from '../../../../dialogs/confirm/confirm.component'
 import { TranslatePipe } from '@ngx-translate/core'
 import type { Nullable } from '@shared/utils'
 
@@ -36,20 +36,20 @@ export class GroupComponent {
 
   public id: string | null = null
 
-  public users: UserWithoutPassword[] = []
-  public unselectedUsers: UserWithoutPassword[] = []
-  public selectableUsers: UserWithoutPassword[] = []
-  userSelect = new FormControl<UserWithoutPassword | null>(null)
+  public users: UserWithout密码[] = []
+  public unselected用户: UserWithout密码[] = []
+  public selectable用户: UserWithout密码[] = []
+  userSelect = new FormControl<UserWithout密码 | null>(null)
 
   public form = new FormGroup({
     // only alphanumeric, underscore, and hyphen
     name: new FormControl<string | null>(null, [Validators.required, Validators.pattern('^[A-Za-z0-9_-]+$')]),
-    users: new FormControl<GroupUsers['users']>([], { nonNullable: true }),
+    users: new FormControl<Group用户['users']>([], { nonNullable: true }),
     mfaRequired: new FormControl<boolean>(false, { nonNullable: true }),
     autoAssign: new FormControl<boolean>(false, { nonNullable: true }),
   }) satisfies FormGroup<TypedControls<Omit<GroupUpsert, 'id' | 'name'> & Nullable<Pick<GroupUpsert, 'name'>>>>
 
-  private adminService = inject(AdminService)
+  private adminService = inject(管理员Service)
   private route = inject(ActivatedRoute)
   private router = inject(Router)
   private snackbarService = inject(SnackbarService)
@@ -93,15 +93,15 @@ export class GroupComponent {
   }
 
   userAutoFilter(value: string = '') {
-    this.unselectedUsers = this.users.filter((u) => {
+    this.unselected用户 = this.users.filter((u) => {
       return !this.form.controls.users.value.find(gu => u.id === gu.id)
     })
-    this.selectableUsers = this.unselectedUsers.filter((u) => {
+    this.selectable用户 = this.unselected用户.filter((u) => {
       return u.username.toLowerCase().includes(value.toLowerCase())
         || u.email?.toLowerCase().includes(value.toLowerCase())
         || u.name?.toLowerCase().includes(value.toLowerCase())
     }).slice(0, 5)
-    if (this.unselectedUsers.length) {
+    if (this.unselected用户.length) {
       this.userSelect.enable()
     } else {
       this.userSelect.disable()
@@ -109,7 +109,7 @@ export class GroupComponent {
   }
 
   addUser(event: MatAutocompleteSelectedEvent) {
-    const value = event.option.value as UserWithoutPassword | null
+    const value = event.option.value as UserWithout密码 | null
     if (!value) {
       return
     }
@@ -152,14 +152,14 @@ export class GroupComponent {
   }
 
   remove() {
-    const dialogRef = this.dialog.open(ConfirmComponent, {
+    const dialogRef = this.dialog.open(确认Component, {
       data: {
         message: `Are you sure you want to delete this group?`,
-        header: 'Delete',
+        header: '删除',
       },
     })
 
-    dialogRef.afterClosed().subscribe(async (result) => {
+    dialogRef.after关闭d().subscribe(async (result) => {
       if (!result) {
         return
       }

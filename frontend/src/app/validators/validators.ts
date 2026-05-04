@@ -62,12 +62,12 @@ export function isValidURL(value: string) {
   }
 }
 
-export function isValidEmail(control: AbstractControl) {
+export function isValid邮箱(control: AbstractControl) {
   try {
     if (typeof control.value === 'string' && control.value) {
       const value = control.value
       if (!zod.regexes.email.test(value)) {
-        throw new Error('Invalid Email.')
+        throw new Error('Invalid 邮箱.')
       }
     }
     return null

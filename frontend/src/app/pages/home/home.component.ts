@@ -7,16 +7,16 @@ import { SnackbarService } from '../../services/snackbar.service'
 import { UserService } from '../../services/user.service'
 import type { CurrentUserPrivateDetails } from '@shared/api-response/UserDetails'
 import { ConfigService } from '../../services/config.service'
-import { PasswordSetComponent } from '../../components/password-reset/password-set.component'
+import { 密码SetComponent } from '../../components/password-reset/password-set.component'
 import { SpinnerService } from '../../services/spinner.service'
 import { PasskeyService, type PasskeySupport } from '../../services/passkey.service'
 import { WebAuthnAbortService, WebAuthnError } from '@simplewebauthn/browser'
 import type { ConfigResponse } from '@shared/api-response/ConfigResponse'
 import { MatDialog } from '@angular/material/dialog'
-import { ConfirmComponent } from '../../dialogs/confirm/confirm.component'
+import { 确认Component } from '../../dialogs/confirm/confirm.component'
 import { TotpRegisterComponent } from '../../dialogs/totp-register/totp-register.component'
-import { PasskeyEditDialog } from '../../dialogs/passkey-edit/passkey-edit.component'
-import { isValidEmail } from '../../validators/validators'
+import { Passkey编辑Dialog } from '../../dialogs/passkey-edit/passkey-edit.component'
+import { isValid邮箱 } from '../../validators/validators'
 import { TranslatePipe } from '@ngx-translate/core'
 import { AsyncPipe } from '@angular/common'
 import type { PasskeyResponse } from '@shared/api-response/PasskeyResponse'
@@ -31,7 +31,7 @@ import { CommonModule } from '@angular/common'
     ReactiveFormsModule,
     MaterialModule,
     ValidationErrorPipe,
-    PasswordSetComponent,
+    密码SetComponent,
     TranslatePipe,
     AsyncPipe,
     CommonModule,
@@ -57,40 +57,40 @@ export class HomeComponent implements OnInit, OnDestroy {
     email: new FormControl<string>({
       value: '',
       disabled: false,
-    }, [Validators.required, isValidEmail]),
+    }, [Validators.required, isValid邮箱]),
   })
 
   public passwordForm = new FormGroup({
-    oldPassword: new FormControl<string>({
+    old密码: new FormControl<string>({
       value: '',
       disabled: false,
     }, []),
-    newPassword: new FormControl<string>({
+    new密码: new FormControl<string>({
       value: '',
       disabled: false,
     }, [Validators.required]),
-    confirmPassword: new FormControl<string>({
+    confirm密码: new FormControl<string>({
       value: '',
       disabled: false,
     }, [Validators.required]),
   }, {
     validators: (g) => {
-      const passAreEqual = g.get('newPassword')?.value === g.get('confirmPassword')?.value
+      const passAreEqual = g.get('new密码')?.value === g.get('confirm密码')?.value
       if (!passAreEqual) {
-        g.get('confirmPassword')?.setErrors({ notEqual: 'Must equal Password' })
-        return { notEqual: 'Passwords do not match' }
+        g.get('confirm密码')?.setErrors({ notEqual: 'Must equal 密码' })
+        return { notEqual: '密码s do not match' }
       }
-      g.get('confirmPassword')?.setErrors(null)
+      g.get('confirm密码')?.setErrors(null)
       return null
     },
   })
 
   passkeyColumns: TableColumn<PasskeyResponse>[] = [
     {
-      columnDef: 'displayName',
-      header: 'Name/ID',
+      columnDef: 'display名称',
+      header: '名称/ID',
       // User name if exists, otherwise use id convert from base64Url to base64, then convert to hex
-      cell: element => element.displayName || atob(element.id.replace(/-/g, '+').replace(/_/g, '/'))
+      cell: element => element.display名称 || atob(element.id.replace(/-/g, '+').replace(/_/g, '/'))
         .split('')
         .map(function (aChar) {
           return ('00' + aChar.charCodeAt(0).toString(16)).slice(-2)
@@ -105,7 +105,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     },
     {
       columnDef: 'createdAt',
-      header: 'Created At',
+      header: '创建d At',
       cell: element => element.createdAt
         ? new Date(element.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })
         : '-',
@@ -169,23 +169,23 @@ export class HomeComponent implements OnInit, OnDestroy {
       })
       this.passwordForm.reset()
 
-      if (this.user.hasPassword) {
-        this.passwordForm.controls.oldPassword.addValidators(Validators.required)
-        this.passwordForm.controls.oldPassword.updateValueAndValidity()
+      if (this.user.has密码) {
+        this.passwordForm.controls.old密码.addValidators(Validators.required)
+        this.passwordForm.controls.old密码.updateValueAndValidity()
       }
     } finally {
       this.spinnerService.hide()
     }
   }
 
-  async updateProfile() {
+  async update个人资料() {
     try {
       this.spinnerService.show()
 
-      await this.userService.updateProfile({
+      await this.userService.update个人资料({
         name: this.profileForm.value.name ?? undefined,
       })
-      this.snackbarService.message('Profile updated.')
+      this.snackbarService.message('个人资料 updated.')
     } catch (_e) {
       this.snackbarService.error('Could not update profile.')
     } finally {
@@ -194,19 +194,19 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
   }
 
-  async updatePassword() {
+  async update密码() {
     try {
       this.spinnerService.show()
-      const { oldPassword, newPassword } = this.passwordForm.getRawValue()
-      if (!newPassword) {
-        throw new Error('Password missing.')
+      const { old密码, new密码 } = this.passwordForm.getRawValue()
+      if (!new密码) {
+        throw new Error('密码 missing.')
       }
 
-      await this.userService.updatePassword({
-        oldPassword: oldPassword,
-        newPassword: newPassword,
+      await this.userService.update密码({
+        old密码: old密码,
+        new密码: new密码,
       })
-      this.snackbarService.message('Password updated.')
+      this.snackbarService.message('密码 updated.')
       await this.loadUser()
     } catch (_e) {
       this.snackbarService.error('Could not update password.')
@@ -215,21 +215,21 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
   }
 
-  async updateEmail() {
+  async update邮箱() {
     try {
       this.spinnerService.show()
       const email = this.emailForm.value.email
       if (!email) {
-        throw new Error('Email missing.')
+        throw new Error('邮箱 missing.')
       }
-      await this.userService.updateEmail({
+      await this.userService.update邮箱({
         email: email,
       })
       // if email verification enabled, indicate that in message
       if (this.config?.emailVerification) {
         this.snackbarService.message('Verification email sent.')
       } else {
-        this.snackbarService.message('Email updated.')
+        this.snackbarService.message('邮箱 updated.')
       }
     } catch (e) {
       console.error(e)
@@ -258,12 +258,12 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
   }
 
-  updatePasskey(id: string, displayName: string | null) {
-    const dialogRef = this.dialog.open(PasskeyEditDialog, {
-      data: { id, displayName },
+  updatePasskey(id: string, display名称: string | null) {
+    const dialogRef = this.dialog.open(Passkey编辑Dialog, {
+      data: { id, display名称 },
     })
 
-    dialogRef.afterClosed().subscribe(async (result) => {
+    dialogRef.after关闭d().subscribe(async (result) => {
       if (!result || typeof result !== 'string') {
         return
       }
@@ -285,14 +285,14 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   deletePasskey(id: string) {
-    const dialogRef = this.dialog.open(ConfirmComponent, {
+    const dialogRef = this.dialog.open(确认Component, {
       data: {
         message: `Are you sure you want to delete this Passkey?`,
-        header: 'Delete',
+        header: '删除',
       },
     })
 
-    dialogRef.afterClosed().subscribe(async (result) => {
+    dialogRef.after关闭d().subscribe(async (result) => {
       if (!result) {
         return
       }
@@ -317,7 +317,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       panelClass: 'overflow-auto',
     })
 
-    dialogRef.afterClosed().subscribe(async (result) => {
+    dialogRef.after关闭d().subscribe(async (result) => {
       if (result) {
         await this.loadUser()
         this.snackbarService.message(hadTotp ? 'Authenticator added successfully.' : 'Multi-Factor Authentication enabled.')
@@ -326,14 +326,14 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   removeAllPasskeys() {
-    const dialogRef = this.dialog.open(ConfirmComponent, {
+    const dialogRef = this.dialog.open(确认Component, {
       data: {
         message: `Are you sure you want to delete all of your account Passkeys? Previously enabled services like FaceID, Windows Hello, TouchID, etc. will stop working.`,
-        header: 'Delete',
+        header: '删除',
       },
     })
 
-    dialogRef.afterClosed().subscribe(async (result) => {
+    dialogRef.after关闭d().subscribe(async (result) => {
       if (!result) {
         return
       }
@@ -343,7 +343,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         await this.userService.removeAllPasskeys()
         this.passkeyService.resetPasskeySeen()
         this.passkeyService.resetPasskeySkipped()
-        this.snackbarService.message('Removed all Passkeys.')
+        this.snackbarService.message('移除d all Passkeys.')
       } catch (_e) {
         this.snackbarService.error('Could not remove all Passkeys.')
       } finally {
@@ -353,23 +353,23 @@ export class HomeComponent implements OnInit, OnDestroy {
     })
   }
 
-  removePassword() {
-    const dialogRef = this.dialog.open(ConfirmComponent, {
+  remove密码() {
+    const dialogRef = this.dialog.open(确认Component, {
       data: {
         message: `Are you sure you want to remove your account password? You will have to login with a Passkey, FaceID, Windows Hello, etc. until you set a password again.`,
-        header: 'Remove',
+        header: '移除',
       },
     })
 
-    dialogRef.afterClosed().subscribe(async (result) => {
+    dialogRef.after关闭d().subscribe(async (result) => {
       if (!result) {
         return
       }
 
       try {
         this.spinnerService.show()
-        await this.userService.removePassword()
-        this.snackbarService.message('Removed password.')
+        await this.userService.remove密码()
+        this.snackbarService.message('移除d password.')
       } catch (_e) {
         this.snackbarService.error('Could not remove password.')
       } finally {
@@ -380,14 +380,14 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   removeAllAuthenticators() {
-    const dialogRef = this.dialog.open(ConfirmComponent, {
+    const dialogRef = this.dialog.open(确认Component, {
       data: {
         message: `Are you sure you want to disable Multi-Factor Authentication and remove any Authenticators on your account?`,
-        header: 'Remove',
+        header: '移除',
       },
     })
 
-    dialogRef.afterClosed().subscribe(async (result) => {
+    dialogRef.after关闭d().subscribe(async (result) => {
       if (!result) {
         return
       }
@@ -406,7 +406,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   deleteUser() {
-    const dialogRef = this.dialog.open(ConfirmComponent, {
+    const dialogRef = this.dialog.open(确认Component, {
       data: {
         message: `Are you sure you want to delete your account?`,
         header: 'DANGER',
@@ -414,7 +414,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       },
     })
 
-    dialogRef.afterClosed().subscribe(async (result) => {
+    dialogRef.after关闭d().subscribe(async (result) => {
       if (!result) {
         return
       }
@@ -422,7 +422,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       try {
         this.spinnerService.show()
         await this.userService.deleteUser()
-        this.snackbarService.message('Deleted account.')
+        this.snackbarService.message('删除d account.')
       } catch (_e) {
         this.snackbarService.error('Could not delete account.')
       } finally {

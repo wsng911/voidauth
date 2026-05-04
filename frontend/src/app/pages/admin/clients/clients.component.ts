@@ -1,5 +1,5 @@
 import { Component, inject, type AfterViewInit, viewChild } from '@angular/core'
-import { AdminService } from '../../../services/admin.service'
+import { 管理员Service } from '../../../services/admin.service'
 import { MaterialModule } from '../../../material-module'
 import { MatPaginator } from '@angular/material/paginator'
 import { MatSort } from '@angular/material/sort'
@@ -9,7 +9,7 @@ import { RouterLink } from '@angular/router'
 import { SpinnerService } from '../../../services/spinner.service'
 import { OidcInfoComponent } from '../../../components/oidc-info/oidc-info.component'
 import { MatDialog } from '@angular/material/dialog'
-import { ConfirmComponent } from '../../../dialogs/confirm/confirm.component'
+import { 确认Component } from '../../../dialogs/confirm/confirm.component'
 import type { ClientResponse } from '@shared/api-response/ClientResponse'
 import { TranslatePipe } from '@ngx-translate/core'
 
@@ -31,7 +31,7 @@ export type TableColumn<T> = {
   templateUrl: './clients.component.html',
   styleUrl: './clients.component.scss',
 })
-export class ClientsComponent implements AfterViewInit {
+export class 客户端Component implements AfterViewInit {
   dataSource: MatTableDataSource<ClientResponse> = new MatTableDataSource()
 
   readonly paginator = viewChild.required(MatPaginator)
@@ -40,7 +40,7 @@ export class ClientsComponent implements AfterViewInit {
   columns: TableColumn<ClientResponse>[] = [
     {
       columnDef: 'client_name',
-      header: 'Name',
+      header: '名称',
       cell: element => element.client_name ?? element.client_id,
     },
     {
@@ -57,7 +57,7 @@ export class ClientsComponent implements AfterViewInit {
 
   displayedColumns = this.columns.map(c => c.columnDef).concat('actions')
 
-  private adminService = inject(AdminService)
+  private adminService = inject(管理员Service)
   private snackbarService = inject(SnackbarService)
   private spinnerService = inject(SpinnerService)
   private dialog = inject(MatDialog)
@@ -76,14 +76,14 @@ export class ClientsComponent implements AfterViewInit {
 
   delete(client_id: string) {
     const client = this.dataSource.data.find(c => c.client_id === client_id)
-    const dialogRef = this.dialog.open(ConfirmComponent, {
+    const dialogRef = this.dialog.open(确认Component, {
       data: {
         message: `Are you sure you want to remove app '${client?.client_name ?? client_id}'?`,
-        header: 'Delete',
+        header: '删除',
       },
     })
 
-    dialogRef.afterClosed().subscribe(async (result) => {
+    dialogRef.after关闭d().subscribe(async (result) => {
       if (!result) {
         return
       }

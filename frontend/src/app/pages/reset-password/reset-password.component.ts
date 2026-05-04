@@ -4,7 +4,7 @@ import { MaterialModule } from '../../material-module'
 import { AuthService } from '../../services/auth.service'
 import { SnackbarService } from '../../services/snackbar.service'
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms'
-import { PasswordSetComponent } from '../../components/password-reset/password-set.component'
+import { 密码SetComponent } from '../../components/password-reset/password-set.component'
 import { REDIRECT_PATHS } from '@shared/constants'
 import { HttpErrorResponse } from '@angular/common/http'
 import { SpinnerService } from '../../services/spinner.service'
@@ -20,36 +20,36 @@ import { TranslatePipe } from '@ngx-translate/core'
   imports: [
     MaterialModule,
     ReactiveFormsModule,
-    PasswordSetComponent,
+    密码SetComponent,
     TextDividerComponent,
     TranslatePipe,
   ],
   templateUrl: './reset-password.component.html',
   styleUrl: './reset-password.component.scss',
 })
-export class ResetPasswordComponent {
+export class Reset密码Component {
   userid?: string
   challenge?: string
   config?: ConfigResponse
   passkeySupport?: PasskeySupport
 
   public passwordForm = new FormGroup({
-    newPassword: new FormControl<string>({
+    new密码: new FormControl<string>({
       value: '',
       disabled: false,
     }, [Validators.required]),
-    confirmPassword: new FormControl<string>({
+    confirm密码: new FormControl<string>({
       value: '',
       disabled: false,
     }, [Validators.required]),
   }, {
     validators: (g) => {
-      const passAreEqual = g.get('newPassword')?.value === g.get('confirmPassword')?.value
+      const passAreEqual = g.get('new密码')?.value === g.get('confirm密码')?.value
       if (!passAreEqual) {
-        g.get('confirmPassword')?.setErrors({ notEqual: 'Must equal Password' })
-        return { notEqual: 'Passwords do not match' }
+        g.get('confirm密码')?.setErrors({ notEqual: 'Must equal 密码' })
+        return { notEqual: '密码s do not match' }
       }
-      g.get('confirmPassword')?.setErrors(null)
+      g.get('confirm密码')?.setErrors(null)
       return null
     },
   })
@@ -69,7 +69,7 @@ export class ResetPasswordComponent {
     const challenge = params.get('challenge')
 
     if (!id || !challenge) {
-      this.snackbarService.error('Invalid Password Reset Link.')
+      this.snackbarService.error('Invalid 密码 Reset Link.')
       return
     }
 
@@ -87,18 +87,18 @@ export class ResetPasswordComponent {
 
   async send() {
     try {
-      if (!this.userid || !this.challenge || !this.passwordForm.controls.newPassword.value) {
+      if (!this.userid || !this.challenge || !this.passwordForm.controls.new密码.value) {
         throw new Error('Missing required parameters for submit.')
       }
 
       this.spinnerService.show()
 
-      const { username } = await this.authService.resetPassword({
+      const { username } = await this.authService.reset密码({
         userId: this.userid,
         challenge: this.challenge,
-        newPassword: this.passwordForm.controls.newPassword.value,
+        new密码: this.passwordForm.controls.new密码.value,
       })
-      this.snackbarService.message('Password Reset Complete.')
+      this.snackbarService.message('密码 Reset Complete.')
       await this.router.navigate([REDIRECT_PATHS.LOGIN], {
         queryParams: {
           username,
@@ -129,9 +129,9 @@ export class ResetPasswordComponent {
       if (!userId || !challenge) {
         throw new Error('Missing required parameters for submit.')
       }
-      const optionsJSON = await this.authService.resetPasswordPasskeyStart({ userId, challenge })
+      const optionsJSON = await this.authService.reset密码PasskeyStart({ userId, challenge })
       const registration = await startRegistration({ optionsJSON })
-      const { username } = await this.authService.resetPasswordPasskeyEnd({ ...registration, userId, challenge })
+      const { username } = await this.authService.reset密码PasskeyEnd({ ...registration, userId, challenge })
       this.snackbarService.message('Passkey created.')
       await this.router.navigate([REDIRECT_PATHS.LOGIN], {
         queryParams: {

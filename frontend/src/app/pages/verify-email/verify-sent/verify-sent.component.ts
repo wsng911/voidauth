@@ -9,7 +9,7 @@ import { ConfigService, getCurrentHost } from '../../../services/config.service'
 import { TranslatePipe } from '@ngx-translate/core'
 import { UserService } from '../../../services/user.service'
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms'
-import { isValidEmail } from '../../../validators/validators'
+import { isValid邮箱 } from '../../../validators/validators'
 import { ValidationErrorPipe } from '../../../pipes/ValidationErrorPipe'
 import type { CurrentUserDetails } from '@shared/api-response/UserDetails'
 import { AsyncPipe } from '@angular/common'
@@ -33,7 +33,7 @@ export class VerifySentComponent implements OnInit {
     email: new FormControl<string>({
       value: '',
       disabled: false,
-    }, [Validators.required, isValidEmail]),
+    }, [Validators.required, isValid邮箱]),
   })
 
   private router = inject(Router)
@@ -67,19 +67,19 @@ export class VerifySentComponent implements OnInit {
       this.snackbarService.error('Could not load user details.')
     }
 
-    if (!this.currentUser || this.currentUser.hasEmail) {
+    if (!this.currentUser || this.currentUser.has邮箱) {
       this.emailForm.controls.email.disable()
     }
   }
 
-  public async updateEmail() {
+  public async update邮箱() {
     try {
       this.spinnerService.show()
       const email = this.emailForm.value.email
       if (!email) {
-        throw new Error('Email missing.')
+        throw new Error('邮箱 missing.')
       }
-      const { sentVerification } = await this.userService.updateEmail({
+      const { sentVerification } = await this.userService.update邮箱({
         email: email,
       })
       // if email verification enabled, indicate that in message
@@ -92,7 +92,7 @@ export class VerifySentComponent implements OnInit {
         })
         this.snackbarService.message('Verification email sent.')
       } else {
-        this.snackbarService.message('Email updated.')
+        this.snackbarService.message('邮箱 updated.')
         await this.router.navigate([REDIRECT_PATHS.LOGIN])
       }
     } catch (e) {
@@ -107,14 +107,14 @@ export class VerifySentComponent implements OnInit {
   public async sendVerification() {
     try {
       this.spinnerService.show()
-      await this.userService.sendEmailVerification()
+      await this.userService.send邮箱Verification()
       await this.router.navigate([], {
         queryParams: {
           sent: true,
         },
         queryParamsHandling: 'merge',
       })
-      this.snackbarService.message('Verification Email Re-Sent.')
+      this.snackbarService.message('Verification 邮箱 Re-Sent.')
     } catch (e) {
       console.error(e)
       let error: string | null = null
@@ -132,11 +132,11 @@ export class VerifySentComponent implements OnInit {
     }
   }
 
-  async updateEmailOrSendVerification() {
-    if (this.currentUser?.hasEmail) {
+  async update邮箱OrSendVerification() {
+    if (this.currentUser?.has邮箱) {
       await this.sendVerification()
     } else {
-      await this.updateEmail()
+      await this.update邮箱()
     }
   }
 }

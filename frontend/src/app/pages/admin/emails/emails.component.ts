@@ -3,8 +3,8 @@ import { MatPaginator } from '@angular/material/paginator'
 import { MatSort } from '@angular/material/sort'
 import { MatTableDataSource } from '@angular/material/table'
 import type { TableColumn } from '../clients/clients.component'
-import type { EmailLog } from '@shared/db/EmailLog'
-import { AdminService } from '../../../services/admin.service'
+import type { 邮箱Log } from '@shared/db/邮箱Log'
+import { 管理员Service } from '../../../services/admin.service'
 import { SnackbarService } from '../../../services/snackbar.service'
 import { SpinnerService } from '../../../services/spinner.service'
 import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog'
@@ -12,7 +12,7 @@ import { MaterialModule } from '../../../material-module'
 import { RouterLink } from '@angular/router'
 import { DomSanitizer, type SafeHtml } from '@angular/platform-browser'
 import DOMPurify from 'isomorphic-dompurify'
-import { EmailInputComponent } from '../../../dialogs/email-input/email-input.component'
+import { 邮箱InputComponent } from '../../../dialogs/email-input/email-input.component'
 import { UserService } from '../../../services/user.service'
 import type { CurrentUserDetails } from '@shared/api-response/UserDetails'
 import type { ConfigResponse } from '@shared/api-response/ConfigResponse'
@@ -29,13 +29,13 @@ import { TranslatePipe } from '@ngx-translate/core'
   templateUrl: './emails.component.html',
   styleUrl: './emails.component.scss',
 })
-export class EmailsComponent {
-  dataSource: MatTableDataSource<EmailLog> = new MatTableDataSource()
+export class 邮箱sComponent {
+  dataSource: MatTableDataSource<邮箱Log> = new MatTableDataSource()
 
   readonly paginator = viewChild.required(MatPaginator)
   readonly sort = viewChild.required(MatSort)
 
-  columns: TableColumn<EmailLog>[] = [
+  columns: TableColumn<邮箱Log>[] = [
     {
       columnDef: 'createdAt',
       header: 'Sent',
@@ -55,7 +55,7 @@ export class EmailsComponent {
 
   displayedColumns = ([] as string[]).concat(this.columns.map(c => c.columnDef)).concat(['actions'])
 
-  private adminService = inject(AdminService)
+  private adminService = inject(管理员Service)
   private snackbarService = inject(SnackbarService)
   private spinnerService = inject(SpinnerService)
   private dialog = inject(MatDialog)
@@ -103,26 +103,26 @@ export class EmailsComponent {
     }
   }
 
-  sendTestEmail() {
-    const testEmailDialog = this.dialog.open<EmailInputComponent, { message?: string, header?: string, initial?: string }>(
-      EmailInputComponent, {
+  sendTest邮箱() {
+    const test邮箱Dialog = this.dialog.open<邮箱InputComponent, { message?: string, header?: string, initial?: string }>(
+      邮箱InputComponent, {
         data: {
-          header: 'Send Test Email',
+          header: 'Send Test 邮箱',
           initial: this.me?.email,
         },
-        disableClose: true,
+        disable关闭: true,
       })
 
-    testEmailDialog.afterClosed().subscribe(async (data) => {
+    test邮箱Dialog.after关闭d().subscribe(async (data) => {
       if (data && typeof data === 'string') {
         try {
           this.spinnerService.show()
-          await this.adminService.sendTestEmail(data)
+          await this.adminService.sendTest邮箱(data)
           await this.setData()
-          this.snackbarService.message('Sent Test Email.')
+          this.snackbarService.message('Sent Test 邮箱.')
         } catch (e) {
           console.error(e)
-          this.snackbarService.error('Could not send Test Email.')
+          this.snackbarService.error('Could not send Test 邮箱.')
         } finally {
           this.spinnerService.hide()
         }
@@ -130,8 +130,8 @@ export class EmailsComponent {
     })
   }
 
-  previewEmail(email: EmailLog) {
-    this.dialog.open(EmailPreviewComponent, {
+  preview邮箱(email: 邮箱Log) {
+    this.dialog.open(邮箱PreviewComponent, {
       data: email,
       width: '600px',
       height: 'calc(100% - 16px)',
@@ -153,7 +153,7 @@ export class EmailsComponent {
       </div>
     </div>
     <mat-dialog-actions>
-      <button mat-button [mat-dialog-close]="true">Close</button>
+      <button mat-button [mat-dialog-close]="true">关闭</button>
     </mat-dialog-actions>
   `,
   styles: `
@@ -178,8 +178,8 @@ export class EmailsComponent {
     }
   `,
 })
-class EmailPreviewComponent {
-  dialogData = inject<EmailLog>(MAT_DIALOG_DATA)
+class 邮箱PreviewComponent {
+  dialogData = inject<邮箱Log>(MAT_DIALOG_DATA)
   sanitizer = inject(DomSanitizer)
   body?: SafeHtml
   constructor() {

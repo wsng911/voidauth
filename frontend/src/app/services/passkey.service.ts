@@ -15,7 +15,7 @@ import { SpinnerService } from './spinner.service'
 import { MaterialModule } from '../material-module'
 import type { CurrentUserDetails } from '@shared/api-response/UserDetails'
 import { TranslatePipe } from '@ngx-translate/core'
-import { PasskeyNameDialog } from '../dialogs/passkey-name/passkey-name.component'
+import { Passkey名称Dialog } from '../dialogs/passkey-name/passkey-name.component'
 import type { PasskeyRegisterResponse } from '@shared/api-response/PasskeyRegisterResponse'
 
 @Injectable({
@@ -29,7 +29,7 @@ export class PasskeyService {
 
   /**
    * Checks if passkey registration or usage has ever been flagged in localStorage.
-   * Not a perfect solution, but until there is a method to check if a device passkey exists,
+   * 否t a perfect solution, but until there is a method to check if a device passkey exists,
    * this will have to do. This is just a hint and should not disable any functionality.
    * @returns if there is passkey usage flagged in localStorage
    */
@@ -53,14 +53,14 @@ export class PasskeyService {
     localStorage.removeItem('passkey_skipped')
   }
 
-  static getPlatform(osName: string): Pick<PasskeySupport, 'platformName' | 'platformIcon'> | null {
-    switch (osName) {
+  static getPlatform(os名称: string): Pick<PasskeySupport, 'platform名称' | 'platformIcon'> | null {
+    switch (os名称) {
       // case 'Windows':
-      //   return { platformName: 'Windows Hello', platformIcon: 'sentiment_satisfied' }
+      //   return { platform名称: 'Windows Hello', platformIcon: 'sentiment_satisfied' }
       case 'iOS':
-        return { platformName: 'Face ID', platformIcon: 'face' }
+        return { platform名称: 'Face ID', platformIcon: 'face' }
       case 'macOS':
-        return { platformName: 'Touch ID', platformIcon: 'fingerprint' }
+        return { platform名称: 'Touch ID', platformIcon: 'fingerprint' }
       default:
         return null
     }
@@ -73,18 +73,18 @@ export class PasskeyService {
       }
     }
 
-    let name: PasskeySupport['platformName']
+    let name: PasskeySupport['platform名称']
     let icon: string | undefined
     if (await platformAuthenticatorIsAvailable()) {
       const { os } = UAParser(navigator.userAgent)
       const platformInfo = PasskeyService.getPlatform(os.name ?? '')
-      name = platformInfo?.platformName
+      name = platformInfo?.platform名称
       icon = platformInfo?.platformIcon
     }
 
     return {
       enabled: true,
-      platformName: name,
+      platform名称: name,
       platformIcon: icon,
     }
   }
@@ -93,8 +93,8 @@ export class PasskeyService {
     return firstValueFrom(this.http.post<PublicKeyCredentialRequestOptionsJSON>('/api/interaction/passkey/start', { requireVerified }))
   }
 
-  async updatePasskey(passkey_id: string, displayName: string) {
-    return firstValueFrom(this.http.patch<null>(`/api/interaction/passkey/${passkey_id}`, { displayName }))
+  async updatePasskey(passkey_id: string, display名称: string) {
+    return firstValueFrom(this.http.patch<null>(`/api/interaction/passkey/${passkey_id}`, { display名称 }))
   }
 
   private async sendAuth(auth: AuthenticationResponseJSON, remember?: boolean) {
@@ -140,11 +140,11 @@ export class PasskeyService {
   async openNamingDialog(passkeyId: string) {
     return new Promise<void>((resolve, _reject) => {
       this.spinnerService.hide()
-      const nameDialogRef = this.dialog.open(PasskeyNameDialog, { disableClose: true })
-      nameDialogRef.afterClosed().subscribe((displayName: string | null) => {
-        if (displayName) {
+      const nameDialogRef = this.dialog.open(Passkey名称Dialog, { disable关闭: true })
+      nameDialogRef.after关闭d().subscribe((display名称: string | null) => {
+        if (display名称) {
           this.spinnerService.show()
-          this.updatePasskey(passkeyId, displayName).then(() => {
+          this.updatePasskey(passkeyId, display名称).then(() => {
             this.snackbarService.message('Passkey added.')
           }).catch(() => {
             this.snackbarService.error('Passkey created, but could not set name.')
@@ -170,9 +170,9 @@ export class PasskeyService {
 
   async dialogRegistration() {
     return new Promise<void>((resolve, _reject) => {
-      const dialog = this.dialog.open(PasskeyDialog, { disableClose: true })
+      const dialog = this.dialog.open(PasskeyDialog, { disable关闭: true })
 
-      dialog.afterClosed().subscribe((result) => {
+      dialog.after关闭d().subscribe((result) => {
         if (!result) {
           localStorage.setItem('passkey_skipped', Date())
           resolve()
@@ -200,7 +200,7 @@ export class PasskeyService {
 
 export type PasskeySupport = {
   enabled: boolean
-  platformName?: 'Face ID' | 'Touch ID'
+  platform名称?: 'Face ID' | 'Touch ID'
   platformIcon?: string
 }
 
@@ -211,14 +211,14 @@ export type PasskeySupport = {
     TranslatePipe,
   ],
   template: `
-    <h1 mat-dialog-title>{{ 'passkey-dialog.title' | translate:{ platformName: passkeySupport?.platformName ?? ("passkey-title" | translate) } }}</h1>
+    <h1 mat-dialog-title>{{ 'passkey-dialog.title' | translate:{ platform名称: passkeySupport?.platform名称 ?? ("passkey-title" | translate) } }}</h1>
     <mat-dialog-content style="height: 200px; display: flex; justify-content: center; align-items: center;">
       <mat-icon align="center" style="width: 100px; height: 100px; font-size: 100px;" fontSet="material-icons-round" matSuffix>{{ passkeySupport?.platformIcon ?? "key" }}</mat-icon>
     </mat-dialog-content>
     <mat-dialog-actions align="end">
       <button matButton mat-dialog-close>Skip</button>
       <button mat-flat-button type="button" [mat-dialog-close]="true" cdkFocusInitial>
-        {{ 'passkey-dialog.actions.passkey' | translate:{ platformName: passkeySupport?.platformName ?? ("passkey-title" | translate) } }}
+        {{ 'passkey-dialog.actions.passkey' | translate:{ platform名称: passkeySupport?.platform名称 ?? ("passkey-title" | translate) } }}
         <mat-icon fontSet="material-icons-round" matSuffix>key</mat-icon>
       </button>
     </mat-dialog-actions>

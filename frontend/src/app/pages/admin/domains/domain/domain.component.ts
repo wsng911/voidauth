@@ -2,7 +2,7 @@ import { Component, inject } from '@angular/core'
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms'
 import type { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete'
 import { ActivatedRoute, Router } from '@angular/router'
-import { AdminService } from '../../../../services/admin.service'
+import { 管理员Service } from '../../../../services/admin.service'
 import { SnackbarService } from '../../../../services/snackbar.service'
 import { SpinnerService } from '../../../../services/spinner.service'
 import type { TypedControls } from '../../clients/upsert-client/upsert-client.component'
@@ -13,7 +13,7 @@ import { ValidationErrorPipe } from '../../../../pipes/ValidationErrorPipe'
 import { isValidWildcardDomain, type Nullable } from '@shared/utils'
 import type { ProxyAuthResponse } from '@shared/api-response/admin/ProxyAuthResponse'
 import { MatDialog } from '@angular/material/dialog'
-import { ConfirmComponent } from '../../../../dialogs/confirm/confirm.component'
+import { 确认Component } from '../../../../dialogs/confirm/confirm.component'
 import { TranslatePipe } from '@ngx-translate/core'
 
 @Component({
@@ -51,7 +51,7 @@ export class DomainComponent {
     mfaRequired: new FormControl<boolean>(false, { nonNullable: true }),
   }) satisfies FormGroup<TypedControls<Omit<ProxyAuthUpsert, 'id' | 'domain'> & Nullable<Pick<ProxyAuthUpsert, 'domain'>>>>
 
-  private adminService = inject(AdminService)
+  private adminService = inject(管理员Service)
   private route = inject(ActivatedRoute)
   private router = inject(Router)
   private snackbarService = inject(SnackbarService)
@@ -145,14 +145,14 @@ export class DomainComponent {
   }
 
   remove() {
-    const dialogRef = this.dialog.open(ConfirmComponent, {
+    const dialogRef = this.dialog.open(确认Component, {
       data: {
         message: `Are you sure you want to delete this domain?`,
-        header: 'Delete',
+        header: '删除',
       },
     })
 
-    dialogRef.afterClosed().subscribe(async (result) => {
+    dialogRef.after关闭d().subscribe(async (result) => {
       if (!result) {
         return
       }

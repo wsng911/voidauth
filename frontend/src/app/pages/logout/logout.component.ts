@@ -15,7 +15,7 @@ import { TranslatePipe } from '@ngx-translate/core'
   templateUrl: './logout.component.html',
   styleUrl: './logout.component.scss',
 })
-export class LogoutComponent implements OnInit {
+export class 退出登录Component implements OnInit {
   protected challenge?: string
   user?: CurrentUserDetails
   privUser?: CurrentUserPrivateDetails

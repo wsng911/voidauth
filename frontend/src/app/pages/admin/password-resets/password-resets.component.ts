@@ -3,18 +3,18 @@ import { MaterialModule } from '../../../material-module'
 import { MatPaginator } from '@angular/material/paginator'
 import { MatSort } from '@angular/material/sort'
 import { MatTableDataSource } from '@angular/material/table'
-import { AdminService } from '../../../services/admin.service'
+import { 管理员Service } from '../../../services/admin.service'
 import { SnackbarService } from '../../../services/snackbar.service'
 import { SpinnerService } from '../../../services/spinner.service'
 import type { TableColumn } from '../clients/clients.component'
-import type { PasswordResetUser } from '@shared/api-response/admin/PasswordResetUser'
+import type { 密码ResetUser } from '@shared/api-response/admin/密码ResetUser'
 import { FormControl, ReactiveFormsModule } from '@angular/forms'
-import type { UserWithoutPassword } from '@shared/api-response/UserDetails'
+import type { UserWithout密码 } from '@shared/api-response/UserDetails'
 import { ValidationErrorPipe } from '../../../pipes/ValidationErrorPipe'
 import type { ConfigResponse } from '@shared/api-response/ConfigResponse'
 import { ConfigService } from '../../../services/config.service'
 import { MatDialog } from '@angular/material/dialog'
-import { ConfirmComponent } from '../../../dialogs/confirm/confirm.component'
+import { 确认Component } from '../../../dialogs/confirm/confirm.component'
 import { humanDuration } from '@shared/utils'
 import { AsyncPipe } from '@angular/common'
 import { TranslatePipe, TranslateService } from '@ngx-translate/core'
@@ -31,16 +31,16 @@ import { TranslatePipe, TranslateService } from '@ngx-translate/core'
   templateUrl: './password-resets.component.html',
   styleUrl: './password-resets.component.scss',
 })
-export class PasswordResetsComponent {
-  dataSource: MatTableDataSource<PasswordResetUser> = new MatTableDataSource()
+export class 密码ResetsComponent {
+  dataSource: MatTableDataSource<密码ResetUser> = new MatTableDataSource()
 
   readonly paginator = viewChild.required(MatPaginator)
   readonly sort = viewChild.required(MatSort)
 
-  columns: TableColumn<PasswordResetUser>[] = [
+  columns: TableColumn<密码ResetUser>[] = [
     {
       columnDef: 'username',
-      header: 'Username',
+      header: '用户名',
       cell: element => element.username,
     },
     {
@@ -52,13 +52,13 @@ export class PasswordResetsComponent {
 
   displayedColumns = ([] as string[]).concat(this.columns.map(c => c.columnDef)).concat(['actions'])
 
-  users: UserWithoutPassword[] = []
-  selectableUsers: UserWithoutPassword[] = []
-  userSelect = new FormControl<UserWithoutPassword | null>(null)
+  users: UserWithout密码[] = []
+  selectable用户: UserWithout密码[] = []
+  userSelect = new FormControl<UserWithout密码 | null>(null)
 
   config?: ConfigResponse
 
-  adminService = inject(AdminService)
+  adminService = inject(管理员Service)
   snackbarService = inject(SnackbarService)
   private spinnerService = inject(SpinnerService)
   private configService = inject(ConfigService)
@@ -91,10 +91,10 @@ export class PasswordResetsComponent {
         throw new Error('User not selected.')
       }
 
-      const reset = await this.adminService.createPasswordReset({ userId: user.id })
+      const reset = await this.adminService.create密码Reset({ userId: user.id })
       const data = [reset].concat(this.dataSource.data)
       this.dataSource.data = this.dataSource.sortData(data, this.sort())
-      this.snackbarService.message('Password reset link was created.')
+      this.snackbarService.message('密码 reset link was created.')
     } catch (_e) {
       this.snackbarService.error('Could not create password reset link.')
     } finally {
@@ -103,23 +103,23 @@ export class PasswordResetsComponent {
   }
 
   delete(id: string) {
-    const dialogRef = this.dialog.open(ConfirmComponent, {
+    const dialogRef = this.dialog.open(确认Component, {
       data: {
         message: `Are you sure you want to delete this password reset link?`,
-        header: 'Delete',
+        header: '删除',
       },
     })
 
-    dialogRef.afterClosed().subscribe(async (result) => {
+    dialogRef.after关闭d().subscribe(async (result) => {
       if (!result) {
         return
       }
 
       try {
         this.spinnerService.show()
-        await this.adminService.deletePasswordReset(id)
+        await this.adminService.delete密码Reset(id)
         this.dataSource.data = this.dataSource.data.filter(g => g.id !== id)
-        this.snackbarService.message('Password reset link was deleted.')
+        this.snackbarService.message('密码 reset link was deleted.')
       } catch (_e) {
         this.snackbarService.error('Could not delete password reset link.')
       } finally {
@@ -129,14 +129,14 @@ export class PasswordResetsComponent {
   }
 
   userAutoFilter(value: string = '') {
-    this.selectableUsers = this.users.filter((u) => {
+    this.selectable用户 = this.users.filter((u) => {
       return u.username.toLowerCase().includes(value.toLowerCase())
         || u.email?.toLowerCase().includes(value.toLowerCase())
         || u.name?.toLowerCase().includes(value.toLowerCase())
     }).slice(0, 5)
   }
 
-  displayUser(user?: UserWithoutPassword) {
+  displayUser(user?: UserWithout密码) {
     return user?.username ?? ''
   }
 
@@ -144,14 +144,14 @@ export class PasswordResetsComponent {
     this.snackbarService.message(String(this.translateService.instant('admin.password-resets.messages.link-copied')))
   }
 
-  async sendEmail(reset: PasswordResetUser) {
+  async send邮箱(reset: 密码ResetUser) {
     try {
       if (!reset.email) {
         throw new Error('User does not have email address.')
       }
       this.spinnerService.show()
-      await this.adminService.sendPasswordReset(reset.id)
-      this.snackbarService.message(`Password reset link sent to ${reset.email}.`)
+      await this.adminService.send密码Reset(reset.id)
+      this.snackbarService.message(`密码 reset link sent to ${reset.email}.`)
     } catch (_e) {
       this.snackbarService.error('Could not send password reset link.')
     } finally {
